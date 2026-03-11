@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Test</title>
+</head>
+<body>
+<div id="output"></div>
+<script>
+try {
+  const courses = [{"id":1,"date":"2026-03-03","course":"Test"}];
+  document.getElementById('output').innerHTML = 'Courses loaded: ' + courses.length;
+} catch(e) {
+  document.getElementById('output').innerHTML = 'Error: ' + e.message;
+}
+</script>
+</body>
+</html>
