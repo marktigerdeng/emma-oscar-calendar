@@ -14,12 +14,15 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto
 .toolbar { display: flex; gap: 8px; padding: 12px; background: white; border-radius: 12px; margin-bottom: 12px; justify-content: center; flex-wrap: wrap; }
 .btn { padding: 8px 16px; border-radius: 8px; font-size: 0.9rem; font-weight: 600; cursor: pointer; border: none; background: #e2e8f0; color: #1e293b; }
 .btn.primary { background: #6366f1; color: white; }
+.btn.active { background: #4f46e5; color: white; }
 .filters { display: flex; gap: 8px; padding: 12px; background: white; border-radius: 12px; margin-bottom: 12px; justify-content: center; flex-wrap: wrap; }
 .chip { padding: 6px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; cursor: pointer; border: 2px solid transparent; }
 .chip.emma { background: #fdf2f8; color: #ec4899; border-color: #ec4899; }
 .chip.oscar { background: #eff6ff; color: #3b82f6; border-color: #3b82f6; }
 .chip.family { background: #ecfdf5; color: #10b981; border-color: #10b981; }
 .chip.off { background: #f1f5f9; color: #64748b; border-color: #e2e8f0; opacity: 0.5; }
+
+/* Week View */
 .week-view { display: flex; flex-direction: column; gap: 8px; }
 .day-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
 .day-header { padding: 12px 16px; font-weight: 700; display: flex; align-items: center; gap: 8px; background: #f8fafc; border-bottom: 1px solid #e2e8f0; }
@@ -38,10 +41,49 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto
 .tag.emma { background: #fdf2f8; color: #ec4899; }
 .tag.oscar { background: #eff6ff; color: #3b82f6; }
 .tag.family { background: #ecfdf5; color: #10b981; }
+
+/* Month View */
+.month-view { display: none; background: white; border-radius: 12px; overflow: hidden; }
+.month-view.active { display: block; }
+.month-header { display: grid; grid-template-columns: repeat(7, 1fr); background: #f8fafc; }
+.month-header-cell { padding: 10px 2px; text-align: center; font-size: 0.75rem; font-weight: 700; color: #64748b; }
+.month-header-cell.weekend { color: #ef4444; }
+.month-body { display: grid; grid-template-columns: repeat(7, 1fr); }
+.month-cell { min-height: 80px; border-right: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0; padding: 4px; cursor: pointer; }
+.month-cell:nth-child(7n) { border-right: none; }
+.month-cell:hover { background: #f8fafc; }
+.month-cell.other-month { background: #f1f5f9; color: #94a3b8; }
+.month-cell.today { background: #fef3c7; }
+.month-cell.weekend { background: #fef2f2; }
+.cell-date { font-size: 0.85rem; font-weight: 700; margin-bottom: 2px; }
+.cell-date.weekend { color: #ef4444; }
+.month-cell.today .cell-date { background: #6366f1; color: white; width: 24px; height: 24px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 0.8rem; }
+.cell-event { font-size: 0.65rem; padding: 2px 4px; border-radius: 3px; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cell-event.emma { background: #fdf2f8; color: #ec4899; }
+.cell-event.oscar { background: #eff6ff; color: #3b82f6; }
+.cell-event.family { background: #ecfdf5; color: #10b981; }
+.cell-more { font-size: 0.6rem; color: #64748b; text-align: center; }
+
+/* Modal */
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; padding: 16px; }
+.modal-overlay.active { display: flex; }
+.modal { background: white; border-radius: 12px; max-width: 400px; width: 100%; max-height: 80vh; overflow-y: auto; }
+.modal-header { padding: 16px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; }
+.modal-header h2 { font-size: 1.1rem; }
+.modal-close { width: 32px; height: 32px; border-radius: 50%; border: none; background: #f1f5f9; cursor: pointer; font-size: 1.2rem; }
+.modal-body { padding: 16px; }
+.modal-event { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid #e2e8f0; }
+.modal-event:last-child { border-bottom: none; }
+.modal-bar { width: 4px; min-height: 40px; border-radius: 2px; }
+.modal-bar.emma { background: #ec4899; }
+.modal-bar.oscar { background: #3b82f6; }
+.modal-bar.family { background: #10b981; }
+.modal-title { font-weight: 700; font-size: 0.95rem; margin-bottom: 4px; }
+.modal-detail { font-size: 0.8rem; color: #64748b; }
+
 .stats { display: flex; gap: 8px; padding: 12px; background: white; border-radius: 12px; margin-top: 12px; justify-content: center; flex-wrap: wrap; }
 .stat { display: flex; align-items: center; gap: 4px; font-size: 0.8rem; font-weight: 600; padding: 6px 12px; background: #f1f5f9; border-radius: 8px; }
 .stat-dot { width: 8px; height: 8px; border-radius: 50%; }
-.hidden { display: none !important; }
 </style>
 </head>
 <body>
@@ -51,17 +93,39 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto
     <p>🌊 湾仔维护</p>
   </div>
   <div class="toolbar">
-    <button class="btn" onclick="changeWeek(-1)">◀ 上周</button>
-    <button class="btn primary" onclick="goToday()">📍 今天</button>
-    <button class="btn" onclick="changeWeek(1)">下周 ▶</button>
+    <button class="btn" onclick="changeWeek(-1)">◀</button>
+    <button class="btn primary" onclick="goToday()">今天</button>
+    <button class="btn" onclick="changeWeek(1)">▶</button>
+    <button class="btn" id="viewBtn" onclick="toggleView()">月视图</button>
   </div>
   <div class="filters">
     <span class="chip emma" id="fEmma" onclick="toggleFilter('Emma')">👧 Emma</span>
     <span class="chip oscar" id="fOscar" onclick="toggleFilter('Oscar')">👦 Oscar</span>
     <span class="chip family" id="fFamily" onclick="toggleFilter('家庭')">👨‍👩‍👧‍👦 家庭</span>
   </div>
-  <div id="calendar"></div>
+  <div class="week-view" id="weekView"></div>
+  <div class="month-view" id="monthView">
+    <div class="month-header">
+      <div class="month-header-cell">一</div>
+      <div class="month-header-cell">二</div>
+      <div class="month-header-cell">三</div>
+      <div class="month-header-cell">四</div>
+      <div class="month-header-cell">五</div>
+      <div class="month-header-cell weekend">六</div>
+      <div class="month-header-cell weekend">日</div>
+    </div>
+    <div class="month-body" id="monthBody"></div>
+  </div>
   <div class="stats" id="stats"></div>
+</div>
+<div class="modal-overlay" id="modal" onclick="closeModal(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <h2 id="modalTitle">课程详情</h2>
+      <button class="modal-close" onclick="closeModal()">×</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
 </div>
 <script>
 const courses = [
@@ -1497,7 +1561,10 @@ const courses = [
   }
 ];
 
+let currentView = 'week';
 let weekStart = getMonday(new Date());
+let currentMonth = new Date().getMonth();
+let currentYear = new Date().getFullYear();
 let filters = { Emma: true, Oscar: true, "家庭": true };
 
 function getMonday(d) {
@@ -1520,13 +1587,30 @@ function kidClass(kid) {
   return kid === "Emma" ? "emma" : kid === "Oscar" ? "oscar" : "family";
 }
 
+function toggleView() {
+  currentView = currentView === 'week' ? 'month' : 'week';
+  document.getElementById('viewBtn').textContent = currentView === 'week' ? '月视图' : '周视图';
+  document.getElementById('weekView').style.display = currentView === 'week' ? 'flex' : 'none';
+  document.getElementById('monthView').classList.toggle('active', currentView === 'month');
+  render();
+}
+
 function changeWeek(dir) {
-  weekStart.setDate(weekStart.getDate() + dir * 7);
+  if (currentView === 'week') {
+    weekStart.setDate(weekStart.getDate() + dir * 7);
+  } else {
+    currentMonth += dir;
+    if (currentMonth > 11) { currentMonth = 0; currentYear++; }
+    if (currentMonth < 0) { currentMonth = 11; currentYear--; }
+  }
   render();
 }
 
 function goToday() {
-  weekStart = getMonday(new Date());
+  const now = new Date();
+  weekStart = getMonday(now);
+  currentMonth = now.getMonth();
+  currentYear = now.getFullYear();
   render();
 }
 
@@ -1536,8 +1620,46 @@ function toggleFilter(kid) {
   render();
 }
 
+function openModal(dateStr) {
+  const d = new Date(dateStr);
+  const dayNames = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];
+  document.getElementById("modalTitle").textContent = dateStr + " " + dayNames[d.getDay()];
+  const events = getCoursesForDate(dateStr);
+  let html = "";
+  if (events.length === 0) {
+    html = "<p style=\"text-align:center;color:#64748b;padding:20px;\">🎉 没有课程</p>";
+  } else {
+    events.forEach(ev => {
+      const timeStr = ev.start_time ? `${ev.start_time}-${ev.end_time}` : "全天";
+      html += `<div class="modal-event">
+        <div class="modal-bar ${kidClass(ev.kid)}"></div>
+        <div>
+          <div class="modal-title">${ev.course}<span class="tag ${kidClass(ev.kid)}">${ev.kid}</span></div>
+          <div class="modal-detail">🕐 ${timeStr}${ev.location ? " 📍 " + ev.location : ""}${ev.fee ? " 💰$" + ev.fee : ""}</div>
+        </div>
+      </div>`;
+    });
+  }
+  document.getElementById("modalBody").innerHTML = html;
+  document.getElementById("modal").classList.add("active");
+}
+
+function closeModal() {
+  document.getElementById("modal").classList.remove("active");
+}
+
 function render() {
   const todayStr = formatDate(new Date());
+  
+  if (currentView === 'week') {
+    renderWeek(todayStr);
+  } else {
+    renderMonth(todayStr);
+  }
+  renderStats();
+}
+
+function renderWeek(todayStr) {
   const dayNames = ["周一", "周二", "周三", "周四", "周五", "周六", "周日"];
   let html = "";
   
@@ -1571,18 +1693,73 @@ function render() {
     html += "</div></div>";
   }
   
-  document.getElementById("calendar").innerHTML = html;
+  document.getElementById("weekView").innerHTML = html;
+}
+
+function renderMonth(todayStr) {
+  const firstDay = new Date(currentYear, currentMonth, 1);
+  let startDow = firstDay.getDay();
+  startDow = startDow === 0 ? 6 : startDow - 1;
+  const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+  const prevMonthDays = new Date(currentYear, currentMonth, 0).getDate();
+  const totalCells = Math.ceil((startDow + daysInMonth) / 7) * 7;
   
-  // Stats
-  const weekCourses = [];
-  for (let i = 0; i < 7; i++) {
-    const d = new Date(weekStart);
-    d.setDate(weekStart.getDate() + i);
-    weekCourses.push(...getCoursesForDate(formatDate(d)));
+  let html = "";
+  for (let i = 0; i < totalCells; i++) {
+    let dayNum, dateStr, isOther = false;
+    if (i < startDow) {
+      dayNum = prevMonthDays - startDow + 1 + i;
+      dateStr = formatDate(new Date(currentYear, currentMonth - 1, dayNum));
+      isOther = true;
+    } else if (i - startDow >= daysInMonth) {
+      dayNum = i - startDow - daysInMonth + 1;
+      dateStr = formatDate(new Date(currentYear, currentMonth + 1, dayNum));
+      isOther = true;
+    } else {
+      dayNum = i - startDow + 1;
+      dateStr = formatDate(new Date(currentYear, currentMonth, dayNum));
+    }
+    
+    const dow = i % 7;
+    const isWeekend = dow >= 5;
+    const isToday = dateStr === todayStr;
+    const events = getCoursesForDate(dateStr);
+    
+    html += `<div class="month-cell ${isOther ? "other-month" : ""} ${isToday ? "today" : ""} ${isWeekend ? "weekend" : ""}" onclick="openModal('${dateStr}')">
+      <div class="cell-date ${isWeekend ? "weekend" : ""}">${dayNum}</div>`;
+    
+    events.slice(0, 2).forEach(ev => {
+      html += `<div class="cell-event ${kidClass(ev.kid)}">${ev.course}</div>`;
+    });
+    
+    if (events.length > 2) {
+      html += `<div class="cell-more">+${events.length - 2}</div>`;
+    }
+    html += "</div>";
+  }
+  
+  document.getElementById("monthBody").innerHTML = html;
+}
+
+function renderStats() {
+  let weekCourses = [];
+  if (currentView === 'week') {
+    for (let i = 0; i < 7; i++) {
+      const d = new Date(weekStart);
+      d.setDate(weekStart.getDate() + i);
+      weekCourses.push(...getCoursesForDate(formatDate(d)));
+    }
+  } else {
+    const start = new Date(currentYear, currentMonth, 1);
+    const end = new Date(currentYear, currentMonth + 1, 0);
+    weekCourses = courses.filter(c => {
+      const d = new Date(c.date);
+      return d >= start && d <= end;
+    });
   }
   
   document.getElementById("stats").innerHTML = `
-    <div class="stat"><span class="stat-dot" style="background:#64748b"></span>本周: <strong>${weekCourses.length}</strong></div>
+    <div class="stat"><span class="stat-dot" style="background:#64748b"></span>${currentView === 'week' ? '本周' : '本月'}: <strong>${weekCourses.length}</strong></div>
     <div class="stat"><span class="stat-dot" style="background:#ec4899"></span>Emma: <strong>${weekCourses.filter(c=>c.kid==="Emma").length}</strong></div>
     <div class="stat"><span class="stat-dot" style="background:#3b82f6"></span>Oscar: <strong>${weekCourses.filter(c=>c.kid==="Oscar").length}</strong></div>
     <div class="stat"><span class="stat-dot" style="background:#10b981"></span>家庭: <strong>${weekCourses.filter(c=>c.kid==="家庭").length}</strong></div>
