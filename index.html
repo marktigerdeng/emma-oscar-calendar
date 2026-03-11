@@ -75,7 +75,6 @@ body {
   gap: 6px;
 }
 
-/* View Toggle */
 .view-toggle {
   display: flex;
   background: rgba(255,255,255,0.2);
@@ -121,9 +120,6 @@ body {
   cursor: pointer;
   border: none;
   transition: all 0.15s;
-  display: flex;
-  align-items: center;
-  gap: 4px;
 }
 
 .btn-ghost { background: transparent; color: var(--text); }
@@ -153,7 +149,7 @@ body {
   align-items: center;
 }
 
-.filter-label { font-size: 0.75rem; color: var(--muted); margin-right: 2px; flex-shrink: 0; }
+.filter-label { font-size: 0.75rem; color: var(--muted); margin-right: 2px; }
 
 .filter-chip {
   padding: 5px 12px;
@@ -161,10 +157,7 @@ body {
   font-size: 0.75rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.15s;
   border: 2px solid transparent;
-  flex-shrink: 0;
-  white-space: nowrap;
 }
 
 .filter-chip.emma { background: var(--emma-light); color: var(--emma); border-color: var(--emma); }
@@ -193,7 +186,6 @@ body {
   font-size: 0.7rem;
   font-weight: 700;
   color: var(--muted);
-  text-transform: uppercase;
 }
 
 .month-header-cell.weekend { color: #ef4444; }
@@ -216,13 +208,7 @@ body {
 .month-cell.today { background: var(--today); }
 .month-cell.weekend { background: var(--weekend); }
 
-.day-num {
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--text);
-  margin-bottom: 2px;
-}
-
+.day-num { font-size: 0.8rem; font-weight: 600; color: var(--text); margin-bottom: 2px; }
 .day-num.weekend { color: #ef4444; }
 
 .month-cell.today .day-num {
@@ -246,7 +232,6 @@ body {
   overflow: hidden;
   text-overflow: ellipsis;
   font-weight: 600;
-  line-height: 1.3;
 }
 
 .event-pill.emma { background: var(--emma-light); color: var(--emma); }
@@ -254,7 +239,7 @@ body {
 .event-pill.family { background: var(--family-light); color: var(--family); }
 .event-more { font-size: 0.55rem; color: var(--muted); padding: 1px 3px; }
 
-/* Week View */
+/* Week View - 周视图直接显示详情，不需要弹窗 */
 .week-view { display: flex; flex-direction: column; gap: 8px; }
 
 .day-card {
@@ -262,11 +247,7 @@ body {
   border-radius: var(--radius);
   overflow: hidden;
   box-shadow: var(--shadow);
-  cursor: pointer;
-  transition: all 0.2s;
 }
-
-.day-card:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
 
 .day-header {
   padding: 10px 14px;
@@ -304,7 +285,7 @@ body {
 .event {
   display: flex;
   gap: 10px;
-  padding: 8px 0;
+  padding: 10px 0;
   border-bottom: 1px solid var(--border);
   align-items: flex-start;
 }
@@ -328,7 +309,7 @@ body {
 .event-title {
   font-weight: 600;
   font-size: 0.85rem;
-  margin-bottom: 2px;
+  margin-bottom: 3px;
   display: flex;
   align-items: center;
   flex-wrap: wrap;
@@ -348,12 +329,14 @@ body {
 .kid-tag.family { background: var(--family-light); color: var(--family); }
 
 .event-meta {
-  font-size: 0.7rem;
+  font-size: 0.72rem;
   color: var(--muted);
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
 }
+
+.event-meta span { display: flex; align-items: center; gap: 2px; }
 
 /* Stats */
 .stats {
@@ -385,7 +368,7 @@ body {
 .stat-dot.oscar { background: var(--oscar); }
 .stat-dot.family { background: var(--family); }
 
-/* Modal */
+/* Modal - 只用于月视图 */
 .modal-overlay {
   display: none;
   position: fixed;
@@ -438,7 +421,6 @@ body {
   color: var(--muted);
   cursor: pointer;
   border: none;
-  transition: all 0.15s;
 }
 
 .modal-close:hover { background: var(--border); color: var(--text); }
@@ -450,7 +432,6 @@ body {
   gap: 12px;
   padding: 12px 0;
   border-bottom: 1px solid var(--border);
-  align-items: flex-start;
 }
 
 .modal-event:last-child { border-bottom: none; }
@@ -477,28 +458,12 @@ body {
   gap: 6px;
 }
 
-.modal-event-detail {
-  font-size: 0.75rem;
-  color: var(--muted);
-  margin-top: 2px;
-}
-
-.modal-empty {
-  text-align: center;
-  padding: 24px;
-  color: var(--muted);
-  font-size: 0.85rem;
-}
+.modal-event-detail { font-size: 0.75rem; color: var(--muted); margin-top: 2px; }
+.modal-empty { text-align: center; padding: 24px; color: var(--muted); font-size: 0.85rem; }
 
 /* Footer */
-.footer {
-  text-align: center;
-  padding: 12px;
-  color: var(--muted);
-  font-size: 0.7rem;
-}
+.footer { text-align: center; padding: 12px; color: var(--muted); font-size: 0.7rem; }
 
-/* Hidden */
 .hidden { display: none !important; }
 
 /* Mobile Responsive */
@@ -516,7 +481,7 @@ body {
   .month-cell { min-height: 55px; padding: 2px; }
   .day-num { font-size: 0.7rem; }
   .month-cell.today .day-num { width: 18px; height: 18px; font-size: 0.65rem; }
-  .event-pill { font-size: 0.5rem; padding: 1px 3px; }
+  .event-pill { font-size: 0.5rem; }
   .event-more { font-size: 0.5rem; }
   .month-header-cell { padding: 6px 2px; font-size: 0.6rem; }
   
@@ -525,7 +490,7 @@ body {
   .day-header .date-full { font-size: 0.65rem; }
   .day-body { padding: 6px 12px; }
   .day-body.empty { padding: 10px; font-size: 0.75rem; }
-  .event { gap: 8px; padding: 6px 0; }
+  .event { gap: 8px; padding: 8px 0; }
   .event-dot { width: 6px; height: 6px; margin-top: 4px; }
   .event-title { font-size: 0.8rem; }
   .kid-tag { padding: 1px 5px; font-size: 0.55rem; }
@@ -536,8 +501,6 @@ body {
   .stat-dot { width: 5px; height: 5px; }
   
   .modal { max-width: 100%; margin: 8px; }
-  .modal-header { padding: 12px 16px; }
-  .modal-body { padding: 10px 16px; }
 }
 
 @media (max-width: 380px) {
@@ -579,7 +542,7 @@ body {
     <span class="filter-chip family" id="chipFamily" onclick="toggleFilter('家庭')">👨‍👩‍👧‍👦 家庭</span>
   </div>
 
-  <!-- Week View -->
+  <!-- Week View - 周视图直接显示详情 -->
   <div class="week-view" id="weekView"></div>
 
   <!-- Month View -->
@@ -598,10 +561,10 @@ body {
 
   <div class="stats" id="stats"></div>
 
-  <div class="footer">由湾仔 🌊 维护 · 点击日期查看详情 · 截图添加新日程</div>
+  <div class="footer">由湾仔 🌊 维护 · 月视图点击日期查看详情</div>
 </div>
 
-<!-- Day Detail Modal -->
+<!-- Day Detail Modal - 只用于月视图 -->
 <div class="modal-overlay" id="dayModal" onclick="closeModal(event)">
   <div class="modal" onclick="event.stopPropagation()">
     <div class="modal-header">
@@ -711,9 +674,7 @@ function closeDayModal() {
 }
 
 function closeModal(e) {
-  if (e.target === document.getElementById('dayModal')) {
-    closeDayModal();
-  }
+  if (e.target === document.getElementById('dayModal')) closeDayModal();
 }
 
 function render() {
@@ -741,26 +702,31 @@ function renderWeek() {
     const dateStr = formatDate(d);
     const isToday = dateStr === todayStr;
     const isWeekend = i >= 5;
-    const events = getCoursesForDate(dateStr).slice(0, 3);
-    html += `<div class="day-card" onclick="openDayModal('${dateStr}')">
+    const events = getCoursesForDate(dateStr);
+    
+    html += `<div class="day-card">
       <div class="day-header${isToday ? ' today' : ''}${isWeekend ? ' weekend' : ''}">
         <span class="date-badge">${d.getDate()}</span> 周${dayNames[i]}<span class="date-full">${dateStr}</span>
       </div>
       <div class="day-body${events.length === 0 ? ' empty' : ''}">`;
+    
     if (events.length === 0) {
-      html += '🎉 点击查看';
+      html += '🎉 没有课程';
     } else {
       events.forEach(ev => {
+        const timeStr = ev.start_time ? `${ev.start_time}-${ev.end_time}` : '全天';
         html += `<div class="event">
           <div class="event-dot ${kidClass(ev.kid)}"></div>
           <div class="event-info">
             <div class="event-title">${ev.course} <span class="kid-tag ${kidClass(ev.kid)}">${ev.kid}</span></div>
+            <div class="event-meta">
+              <span>🕐 ${timeStr}</span>
+              ${ev.location ? `<span>📍 ${ev.location}</span>` : ''}
+              ${ev.fee ? `<span>💰 $${ev.fee}</span>` : ''}
+            </div>
           </div>
         </div>`;
       });
-      if (getCoursesForDate(dateStr).length > 3) {
-        html += `<div style="font-size:0.7rem;color:var(--muted);padding:4px 0;">+${getCoursesForDate(dateStr).length - 3} 更多...</div>`;
-      }
     }
     html += '</div></div>';
   }
@@ -776,6 +742,7 @@ function renderMonth() {
   const prevMonthDays = new Date(currentYear, currentMonth, 0).getDate();
   const totalCells = Math.ceil((startDow + daysInMonth) / 7) * 7;
   let html = '';
+  
   for (let i = 0; i < totalCells; i++) {
     let dayNum, dateStr, isOther = false;
     if (i < startDow) {
@@ -794,6 +761,7 @@ function renderMonth() {
     const isWeekend = dow >= 5;
     const isToday = dateStr === todayStr;
     const events = getCoursesForDate(dateStr).slice(0, 2);
+    
     html += `<div class="month-cell${isOther ? ' other-month' : ''}${isToday ? ' today' : ''}${isWeekend ? ' weekend' : ''}" onclick="openDayModal('${dateStr}')">
       <div class="day-num${isWeekend ? ' weekend' : ''}">${dayNum}</div>`;
     events.forEach(ev => {
@@ -822,10 +790,7 @@ function renderStats() {
   `;
 }
 
-// Keyboard shortcut
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') closeDayModal();
-});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDayModal(); });
 
 render();
 </script>
