@@ -25,6 +25,7 @@
   --radius: 12px;
   --shadow: 0 1px 3px rgba(0,0,0,0.1);
   --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+  --shadow-lg: 0 20px 25px rgba(0,0,0,0.15);
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -125,18 +126,9 @@ body {
   gap: 4px;
 }
 
-.btn-ghost {
-  background: transparent;
-  color: var(--text);
-}
-
+.btn-ghost { background: transparent; color: var(--text); }
 .btn-ghost:hover { background: var(--bg); }
-
-.btn-primary {
-  background: var(--primary);
-  color: white;
-}
-
+.btn-primary { background: var(--primary); color: white; }
 .btn-primary:hover { background: var(--primary-dark); }
 
 .month-label {
@@ -159,16 +151,9 @@ body {
   box-shadow: var(--shadow);
   flex-wrap: wrap;
   align-items: center;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
 }
 
-.filter-label {
-  font-size: 0.75rem;
-  color: var(--muted);
-  margin-right: 2px;
-  flex-shrink: 0;
-}
+.filter-label { font-size: 0.75rem; color: var(--muted); margin-right: 2px; flex-shrink: 0; }
 
 .filter-chip {
   padding: 5px 12px;
@@ -182,30 +167,10 @@ body {
   white-space: nowrap;
 }
 
-.filter-chip.emma {
-  background: var(--emma-light);
-  color: var(--emma);
-  border-color: var(--emma);
-}
-
-.filter-chip.oscar {
-  background: var(--oscar-light);
-  color: var(--oscar);
-  border-color: var(--oscar);
-}
-
-.filter-chip.family {
-  background: var(--family-light);
-  color: var(--family);
-  border-color: var(--family);
-}
-
-.filter-chip.off {
-  background: var(--bg);
-  color: var(--muted);
-  border-color: var(--border);
-  opacity: 0.5;
-}
+.filter-chip.emma { background: var(--emma-light); color: var(--emma); border-color: var(--emma); }
+.filter-chip.oscar { background: var(--oscar-light); color: var(--oscar); border-color: var(--oscar); }
+.filter-chip.family { background: var(--family-light); color: var(--family); border-color: var(--family); }
+.filter-chip.off { background: var(--bg); color: var(--muted); border-color: var(--border); opacity: 0.5; }
 
 /* Month View */
 .month-view {
@@ -233,10 +198,7 @@ body {
 
 .month-header-cell.weekend { color: #ef4444; }
 
-.month-body {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-}
+.month-body { display: grid; grid-template-columns: repeat(7, 1fr); }
 
 .month-cell {
   min-height: 70px;
@@ -245,28 +207,14 @@ body {
   padding: 3px;
   cursor: pointer;
   transition: background 0.15s;
-  position: relative;
 }
 
 .month-cell:nth-child(7n) { border-right: none; }
-
 .month-cell:hover { background: var(--bg); }
-
-.month-cell.other-month {
-  background: #fafafa;
-}
-
-.month-cell.other-month .day-num {
-  color: #ccc;
-}
-
-.month-cell.today {
-  background: var(--today);
-}
-
-.month-cell.weekend {
-  background: var(--weekend);
-}
+.month-cell.other-month { background: #fafafa; }
+.month-cell.other-month .day-num { color: #ccc; }
+.month-cell.today { background: var(--today); }
+.month-cell.weekend { background: var(--weekend); }
 
 .day-num {
   font-size: 0.8rem;
@@ -304,26 +252,21 @@ body {
 .event-pill.emma { background: var(--emma-light); color: var(--emma); }
 .event-pill.oscar { background: var(--oscar-light); color: var(--oscar); }
 .event-pill.family { background: var(--family-light); color: var(--family); }
-
-.event-more {
-  font-size: 0.55rem;
-  color: var(--muted);
-  padding: 1px 3px;
-}
+.event-more { font-size: 0.55rem; color: var(--muted); padding: 1px 3px; }
 
 /* Week View */
-.week-view {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
+.week-view { display: flex; flex-direction: column; gap: 8px; }
 
 .day-card {
   background: var(--card);
   border-radius: var(--radius);
   overflow: hidden;
   box-shadow: var(--shadow);
+  cursor: pointer;
+  transition: all 0.2s;
 }
+
+.day-card:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
 
 .day-header {
   padding: 10px 14px;
@@ -352,27 +295,11 @@ body {
   font-weight: 700;
 }
 
-.day-header.today .date-badge {
-  background: rgba(255,255,255,0.2);
-  color: white;
-}
+.day-header.today .date-badge { background: rgba(255,255,255,0.2); color: white; }
+.day-header .date-full { opacity: 0.5; font-size: 0.7rem; font-weight: 400; }
 
-.day-header .date-full {
-  opacity: 0.5;
-  font-size: 0.7rem;
-  font-weight: 400;
-}
-
-.day-body {
-  padding: 8px 14px;
-}
-
-.day-body.empty {
-  padding: 14px;
-  text-align: center;
-  color: var(--muted);
-  font-size: 0.8rem;
-}
+.day-body { padding: 8px 14px; }
+.day-body.empty { padding: 14px; text-align: center; color: var(--muted); font-size: 0.8rem; }
 
 .event {
   display: flex;
@@ -452,16 +379,116 @@ body {
   border-radius: 6px;
 }
 
-.stat-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-}
-
+.stat-dot { width: 6px; height: 6px; border-radius: 50%; }
 .stat-dot.total { background: var(--muted); }
 .stat-dot.emma { background: var(--emma); }
 .stat-dot.oscar { background: var(--oscar); }
 .stat-dot.family { background: var(--family); }
+
+/* Modal */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  backdrop-filter: blur(4px);
+}
+
+.modal-overlay.open { display: flex; }
+
+.modal {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+  max-width: 400px;
+  width: 100%;
+  max-height: 80vh;
+  overflow-y: auto;
+  animation: modalIn 0.2s ease-out;
+}
+
+@keyframes modalIn {
+  from { opacity: 0; transform: translateY(16px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.modal-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.modal-header h2 { font-size: 1rem; font-weight: 700; }
+
+.modal-close {
+  background: var(--bg);
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  color: var(--muted);
+  cursor: pointer;
+  border: none;
+  transition: all 0.15s;
+}
+
+.modal-close:hover { background: var(--border); color: var(--text); }
+
+.modal-body { padding: 12px 20px; }
+
+.modal-event {
+  display: flex;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+  align-items: flex-start;
+}
+
+.modal-event:last-child { border-bottom: none; }
+
+.modal-event-bar {
+  width: 4px;
+  min-height: 40px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.modal-event-bar.emma { background: var(--emma); }
+.modal-event-bar.oscar { background: var(--oscar); }
+.modal-event-bar.family { background: var(--family); }
+
+.modal-event-info { flex: 1; }
+
+.modal-event-name {
+  font-weight: 700;
+  font-size: 0.9rem;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.modal-event-detail {
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+.modal-empty {
+  text-align: center;
+  padding: 24px;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
 
 /* Footer */
 .footer {
@@ -479,7 +506,6 @@ body {
   .app { padding: 8px; }
   .header { padding: 14px; }
   .header-left h1 { font-size: 1.1rem; }
-  .header-left .subtitle { font-size: 0.75rem; }
   .view-btn { padding: 6px 10px; font-size: 0.75rem; }
   .toolbar { padding: 8px 10px; gap: 4px; }
   .btn { padding: 6px 10px; font-size: 0.8rem; }
@@ -487,15 +513,13 @@ body {
   .filters { padding: 8px 10px; gap: 4px; }
   .filter-chip { padding: 4px 10px; font-size: 0.7rem; }
   
-  /* Month view mobile optimization */
   .month-cell { min-height: 55px; padding: 2px; }
   .day-num { font-size: 0.7rem; }
   .month-cell.today .day-num { width: 18px; height: 18px; font-size: 0.65rem; }
-  .event-pill { font-size: 0.5rem; padding: 1px 3px; margin-bottom: 1px; }
+  .event-pill { font-size: 0.5rem; padding: 1px 3px; }
   .event-more { font-size: 0.5rem; }
   .month-header-cell { padding: 6px 2px; font-size: 0.6rem; }
   
-  /* Week view mobile */
   .day-header { padding: 8px 12px; font-size: 0.8rem; gap: 6px; }
   .date-badge { padding: 2px 6px; font-size: 0.7rem; }
   .day-header .date-full { font-size: 0.65rem; }
@@ -510,6 +534,10 @@ body {
   .stats { padding: 10px; gap: 6px; }
   .stat { padding: 4px 8px; font-size: 0.7rem; }
   .stat-dot { width: 5px; height: 5px; }
+  
+  .modal { max-width: 100%; margin: 8px; }
+  .modal-header { padding: 12px 16px; }
+  .modal-body { padding: 10px 16px; }
 }
 
 @media (max-width: 380px) {
@@ -519,7 +547,6 @@ body {
   .month-header-cell { font-size: 0.55rem; padding: 4px 1px; }
   .header { flex-direction: column; text-align: center; gap: 8px; }
   .header-right { width: 100%; justify-content: center; }
-  .month-label { font-size: 0.8rem; }
 }
 </style>
 </head>
@@ -571,8 +598,17 @@ body {
 
   <div class="stats" id="stats"></div>
 
-  <div class="footer">
-    由湾仔 🌊 维护 · 截图给我添加新日程
+  <div class="footer">由湾仔 🌊 维护 · 点击日期查看详情 · 截图添加新日程</div>
+</div>
+
+<!-- Day Detail Modal -->
+<div class="modal-overlay" id="dayModal" onclick="closeModal(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <h2 id="modalTitle">课程详情</h2>
+      <button class="modal-close" onclick="closeDayModal()">×</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
   </div>
 </div>
 
@@ -639,6 +675,47 @@ function toggleFilter(kid) {
   render();
 }
 
+function openDayModal(dateStr) {
+  const d = new Date(dateStr);
+  const dayNames = ['星期日','星期一','星期二','星期三','星期四','星期五','星期六'];
+  document.getElementById('modalTitle').textContent = dateStr + ' ' + dayNames[d.getDay()];
+  
+  const events = getCoursesForDate(dateStr);
+  const body = document.getElementById('modalBody');
+  
+  if (events.length === 0) {
+    body.innerHTML = '<div class="modal-empty">🎉 这天没有课程安排</div>';
+  } else {
+    body.innerHTML = events.map(ev => {
+      const timeStr = ev.start_time ? `${ev.start_time} - ${ev.end_time}` : '全天';
+      let details = [];
+      if (ev.start_time) details.push('🕐 ' + timeStr);
+      if (ev.location) details.push('📍 ' + ev.location);
+      if (ev.fee) details.push('💰 $' + ev.fee);
+      
+      return `<div class="modal-event">
+        <div class="modal-event-bar ${kidClass(ev.kid)}"></div>
+        <div class="modal-event-info">
+          <div class="modal-event-name">${ev.course} <span class="kid-tag ${kidClass(ev.kid)}">${ev.kid}</span></div>
+          ${details.map(d => `<div class="modal-event-detail">${d}</div>`).join('')}
+        </div>
+      </div>`;
+    }).join('');
+  }
+  
+  document.getElementById('dayModal').classList.add('open');
+}
+
+function closeDayModal() {
+  document.getElementById('dayModal').classList.remove('open');
+}
+
+function closeModal(e) {
+  if (e.target === document.getElementById('dayModal')) {
+    closeDayModal();
+  }
+}
+
 function render() {
   renderLabel();
   if (currentView === 'week') renderWeek();
@@ -664,25 +741,26 @@ function renderWeek() {
     const dateStr = formatDate(d);
     const isToday = dateStr === todayStr;
     const isWeekend = i >= 5;
-    const events = getCoursesForDate(dateStr);
-    html += `<div class="day-card">
+    const events = getCoursesForDate(dateStr).slice(0, 3);
+    html += `<div class="day-card" onclick="openDayModal('${dateStr}')">
       <div class="day-header${isToday ? ' today' : ''}${isWeekend ? ' weekend' : ''}">
         <span class="date-badge">${d.getDate()}</span> 周${dayNames[i]}<span class="date-full">${dateStr}</span>
       </div>
       <div class="day-body${events.length === 0 ? ' empty' : ''}">`;
     if (events.length === 0) {
-      html += '🎉 没有课程';
+      html += '🎉 点击查看';
     } else {
       events.forEach(ev => {
-        const timeStr = ev.start_time ? `${ev.start_time}-${ev.end_time}` : '全天';
         html += `<div class="event">
           <div class="event-dot ${kidClass(ev.kid)}"></div>
           <div class="event-info">
             <div class="event-title">${ev.course} <span class="kid-tag ${kidClass(ev.kid)}">${ev.kid}</span></div>
-            <div class="event-meta"><span>${timeStr}</span>${ev.location ? `<span>📍${ev.location}</span>` : ''}${ev.fee ? `<span>💰$${ev.fee}</span>` : ''}</div>
           </div>
         </div>`;
       });
+      if (getCoursesForDate(dateStr).length > 3) {
+        html += `<div style="font-size:0.7rem;color:var(--muted);padding:4px 0;">+${getCoursesForDate(dateStr).length - 3} 更多...</div>`;
+      }
     }
     html += '</div></div>';
   }
@@ -716,7 +794,7 @@ function renderMonth() {
     const isWeekend = dow >= 5;
     const isToday = dateStr === todayStr;
     const events = getCoursesForDate(dateStr).slice(0, 2);
-    html += `<div class="month-cell${isOther ? ' other-month' : ''}${isToday ? ' today' : ''}${isWeekend ? ' weekend' : ''}">
+    html += `<div class="month-cell${isOther ? ' other-month' : ''}${isToday ? ' today' : ''}${isWeekend ? ' weekend' : ''}" onclick="openDayModal('${dateStr}')">
       <div class="day-num${isWeekend ? ' weekend' : ''}">${dayNum}</div>`;
     events.forEach(ev => {
       html += `<div class="event-pill ${kidClass(ev.kid)}">${ev.course}</div>`;
@@ -743,6 +821,11 @@ function renderStats() {
     <div class="stat"><span class="stat-dot family"></span> 家庭: <strong>${list.filter(c=>c.kid==='家庭').length}</strong></div>
   `;
 }
+
+// Keyboard shortcut
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeDayModal();
+});
 
 render();
 </script>
