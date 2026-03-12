@@ -5,71 +5,123 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>📚 Emma & Oscar 课程日历</title>
 <style>
+:root {
+  --emma: #ec4899; --emma-light: #fdf2f8;
+  --oscar: #3b82f6; --oscar-light: #eff6ff;
+  --family: #10b981; --family-light: #ecfdf5;
+  --primary: #6366f1; --primary-dark: #4f46e5;
+  --bg: #f1f5f9; --card: #ffffff;
+  --text: #1e293b; --muted: #64748b; --border: #e2e8f0;
+  --today: #fef3c7; --weekend: #fef2f2;
+  --radius: 12px; --shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans TC", sans-serif; background: #f1f5f9; color: #1e293b; min-height: 100vh; padding: 10px; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans TC", sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding: 10px; }
 .app { max-width: 900px; margin: 0 auto; }
 
+/* Loading */
+.loading-overlay { position: fixed; inset: 0; background: var(--bg); z-index: 9999; display: flex; align-items: center; justify-content: center; transition: opacity 0.3s; }
+.loading-overlay.hidden { opacity: 0; pointer-events: none; }
+.loading-spinner { width: 40px; height: 40px; border: 3px solid var(--border); border-top-color: var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Toast */
+.toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(100px); background: #333; color: white; padding: 12px 24px; border-radius: 8px; font-size: 0.9rem; z-index: 10000; opacity: 0; transition: all 0.3s; }
+.toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+/* Empty State */
+.empty-state { text-align: center; padding: 40px 20px; color: var(--muted); }
+.empty-state-icon { font-size: 3rem; margin-bottom: 12px; }
+.empty-state-text { font-size: 1rem; }
+
 /* Header */
-.header { background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); color: white; padding: 16px; border-radius: 12px; margin-bottom: 10px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+.header { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); color: white; padding: 16px; border-radius: var(--radius); margin-bottom: 10px; text-align: center; box-shadow: var(--shadow); }
 .header h1 { font-size: 1.3rem; margin-bottom: 4px; }
 .header p { font-size: 0.8rem; opacity: 0.9; }
 
 /* Toolbar */
-.toolbar { display: flex; gap: 6px; padding: 10px; background: white; border-radius: 12px; margin-bottom: 10px; justify-content: center; flex-wrap: wrap; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
-.btn { padding: 8px 14px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer; border: none; background: #e2e8f0; color: #1e293b; }
-.btn.primary { background: #6366f1; color: white; }
+.toolbar { display: flex; gap: 6px; padding: 10px; background: var(--card); border-radius: var(--radius); margin-bottom: 10px; justify-content: center; flex-wrap: wrap; box-shadow: var(--shadow); }
+.btn { padding: 8px 14px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer; border: none; background: var(--bg); color: var(--text); transition: all 0.2s; }
+.btn:hover { background: var(--border); }
+.btn.primary { background: var(--primary); color: white; }
+.btn.primary:hover { background: var(--primary-dark); }
 
 /* Filters */
-.filters { display: flex; gap: 6px; padding: 10px; background: white; border-radius: 12px; margin-bottom: 10px; justify-content: center; flex-wrap: wrap; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
-.chip { padding: 6px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; cursor: pointer; border: 2px solid transparent; }
-.chip.emma { background: #fdf2f8; color: #ec4899; border-color: #ec4899; }
-.chip.oscar { background: #eff6ff; color: #3b82f6; border-color: #3b82f6; }
-.chip.family { background: #ecfdf5; color: #10b981; border-color: #10b981; }
-.chip.off { background: #f1f5f9; color: #64748b; border-color: #e2e8f0; opacity: 0.5; }
+.filters { display: flex; gap: 6px; padding: 10px; background: var(--card); border-radius: var(--radius); margin-bottom: 10px; justify-content: center; flex-wrap: wrap; box-shadow: var(--shadow); }
+.chip { padding: 6px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; cursor: pointer; border: 2px solid transparent; transition: all 0.2s; }
+.chip:hover { transform: translateY(-1px); }
+.chip.emma { background: var(--emma-light); color: var(--emma); border-color: var(--emma); }
+.chip.oscar { background: var(--oscar-light); color: var(--oscar); border-color: var(--oscar); }
+.chip.family { background: var(--family-light); color: var(--family); border-color: var(--family); }
+.chip.off { background: var(--bg); color: var(--muted); border-color: var(--border); opacity: 0.5; }
 
 /* Week View */
 .week-view { display: flex; flex-direction: column; gap: 8px; }
-.day-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
-.day-header { padding: 12px 14px; font-weight: 700; display: flex; align-items: center; gap: 8px; background: #f8fafc; border-bottom: 1px solid #e2e8f0; font-size: 0.9rem; }
-.day-header.today { background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); color: white; }
+.day-card { background: var(--card); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
+.day-header { padding: 12px 14px; font-weight: 700; display: flex; align-items: center; gap: 8px; background: var(--bg); border-bottom: 1px solid var(--border); font-size: 0.9rem; }
+.day-header.today { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); color: white; }
 .day-body { padding: 10px 14px; }
-.day-body.empty { color: #64748b; text-align: center; padding: 20px; font-style: italic; }
-.event { display: flex; gap: 10px; padding: 10px 0; border-bottom: 1px solid #e2e8f0; }
+.day-body.empty { color: var(--muted); text-align: center; padding: 24px; font-style: italic; }
+.event { display: flex; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); align-items: flex-start; }
 .event:last-child { border-bottom: none; }
 .event-dot { width: 10px; height: 10px; border-radius: 50%; margin-top: 4px; flex-shrink: 0; }
-.event-dot.emma { background: #ec4899; }
-.event-dot.oscar { background: #3b82f6; }
-.event-dot.family { background: #10b981; }
-.event-title { font-weight: 600; font-size: 0.9rem; margin-bottom: 3px; }
-.event-meta { font-size: 0.75rem; color: #64748b; }
-.tag { display: inline-block; padding: 2px 6px; border-radius: 8px; font-size: 0.65rem; font-weight: 700; margin-left: 4px; }
-.tag.emma { background: #fdf2f8; color: #ec4899; }
-.tag.oscar { background: #eff6ff; color: #3b82f6; }
-.tag.family { background: #ecfdf5; color: #10b981; }
+.event-dot.emma { background: var(--emma); }
+.event-dot.oscar { background: var(--oscar); }
+.event-dot.family { background: var(--family); }
+.event-title { font-weight: 600; font-size: 0.9rem; margin-bottom: 3px; display: flex; align-items: center; flex-wrap: wrap; gap: 4px; }
+.event-meta { font-size: 0.75rem; color: var(--muted); display: flex; flex-wrap: wrap; gap: 8px; }
+.tag { display: inline-block; padding: 2px 6px; border-radius: 8px; font-size: 0.65rem; font-weight: 700; }
+.tag.emma { background: var(--emma-light); color: var(--emma); }
+.tag.oscar { background: var(--oscar-light); color: var(--oscar); }
+.tag.family { background: var(--family-light); color: var(--family); }
 
-/* Month View - Desktop */
-.month-view { display: none; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+/* Month View */
+.month-view { display: none; background: var(--card); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
 .month-view.active { display: block; }
-.month-header { display: grid; grid-template-columns: repeat(7, 1fr); background: #f8fafc; border-bottom: 1px solid #e2e8f0; }
-.month-header-cell { padding: 10px 2px; text-align: center; font-size: 0.8rem; font-weight: 700; color: #64748b; }
+.month-header { display: grid; grid-template-columns: repeat(7, 1fr); background: var(--bg); border-bottom: 1px solid var(--border); }
+.month-header-cell { padding: 10px 2px; text-align: center; font-size: 0.8rem; font-weight: 700; color: var(--muted); }
 .month-header-cell.weekend { color: #ef4444; }
 .month-body { display: grid; grid-template-columns: repeat(7, 1fr); }
-.month-cell { min-height: 85px; border-right: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0; padding: 6px; cursor: pointer; }
+.month-cell { min-height: 85px; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 6px; cursor: pointer; transition: background 0.15s; }
 .month-cell:nth-child(7n) { border-right: none; }
-.month-cell:hover { background: #f8fafc; }
-.month-cell.other-month { background: #f1f5f9; color: #94a3b8; }
-.month-cell.today { background: #fef3c7; }
-.month-cell.weekend { background: #fef2f2; }
+.month-cell:hover { background: var(--bg); }
+.month-cell.other-month { background: #f8fafc; color: #94a3b8; }
+.month-cell.today { background: var(--today); }
+.month-cell.weekend { background: var(--weekend); }
 .cell-date { font-size: 0.9rem; font-weight: 700; margin-bottom: 4px; }
 .cell-date.weekend { color: #ef4444; }
-.month-cell.today .cell-date { background: #6366f1; color: white; width: 26px; height: 26px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 0.8rem; }
+.month-cell.today .cell-date { background: var(--primary); color: white; width: 26px; height: 26px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 0.8rem; }
 .cell-event { font-size: 0.7rem; padding: 3px 5px; border-radius: 4px; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 600; }
-.cell-event.emma { background: #fdf2f8; color: #ec4899; }
-.cell-event.oscar { background: #eff6ff; color: #3b82f6; }
-.cell-event.family { background: #ecfdf5; color: #10b981; }
-.cell-more { font-size: 0.65rem; color: #64748b; text-align: center; padding: 2px; }
+.cell-event.emma { background: var(--emma-light); color: var(--emma); }
+.cell-event.oscar { background: var(--oscar-light); color: var(--oscar); }
+.cell-event.family { background: var(--family-light); color: var(--family); }
+.cell-more { font-size: 0.65rem; color: var(--muted); text-align: center; padding: 2px; }
 
-/* Mobile Month View - Simplified */
+/* Modal */
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; padding: 16px; backdrop-filter: blur(4px); }
+.modal-overlay.active { display: flex; }
+.modal { background: var(--card); border-radius: var(--radius); max-width: 400px; width: 100%; max-height: 80vh; overflow-y: auto; box-shadow: 0 20px 25px rgba(0,0,0,0.2); animation: modalIn 0.2s ease-out; }
+@keyframes modalIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+.modal-header { padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+.modal-header h2 { font-size: 1.1rem; font-weight: 700; }
+.modal-close { width: 32px; height: 32px; border-radius: 50%; border: none; background: var(--bg); cursor: pointer; font-size: 1.2rem; color: var(--muted); transition: all 0.15s; }
+.modal-close:hover { background: var(--border); color: var(--text); }
+.modal-body { padding: 16px 20px; }
+.modal-event { display: flex; gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--border); align-items: flex-start; }
+.modal-event:last-child { border-bottom: none; }
+.modal-bar { width: 4px; min-height: 44px; border-radius: 2px; flex-shrink: 0; }
+.modal-bar.emma { background: var(--emma); }
+.modal-bar.oscar { background: var(--oscar); }
+.modal-bar.family { background: var(--family); }
+.modal-title { font-weight: 700; font-size: 1rem; margin-bottom: 4px; display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
+.modal-detail { font-size: 0.85rem; color: var(--muted); margin-top: 4px; }
+
+/* Stats */
+.stats { display: flex; gap: 10px; padding: 14px; background: var(--card); border-radius: var(--radius); margin-top: 10px; justify-content: center; flex-wrap: wrap; box-shadow: var(--shadow); }
+.stat { display: flex; align-items: center; gap: 6px; font-size: 0.85rem; font-weight: 600; padding: 8px 14px; background: var(--bg); border-radius: 10px; }
+.stat-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+/* Mobile */
 @media (max-width: 600px) {
   body { padding: 8px; }
   .header { padding: 14px; }
@@ -78,56 +130,38 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto
   .btn { padding: 6px 12px; font-size: 0.8rem; }
   .filters { padding: 8px; }
   .chip { padding: 5px 10px; font-size: 0.7rem; }
-  
-  /* Week View Mobile */
   .day-header { padding: 10px 12px; font-size: 0.85rem; }
   .day-body { padding: 8px 12px; }
   .event { padding: 8px 0; }
   .event-title { font-size: 0.85rem; }
-  
-  /* Month View Mobile - Compact */
-  .month-cell { min-height: 48px; padding: 3px; position: relative; }
+  .month-cell { min-height: 48px; padding: 3px; }
   .month-header-cell { padding: 6px 1px; font-size: 0.65rem; }
-  .cell-date { font-size: 0.75rem; margin-bottom: 1px; position: absolute; top: 3px; left: 3px; }
+  .cell-date { font-size: 0.75rem; }
   .month-cell.today .cell-date { width: 20px; height: 20px; font-size: 0.7rem; }
-  .cell-event { font-size: 0.55rem; padding: 1px 2px; margin-bottom: 1px; margin-top: 18px; }
-  .cell-more { font-size: 0.5rem; padding: 1px; }
+  .cell-event { font-size: 0.6rem; padding: 2px 3px; }
+  .cell-more { font-size: 0.55rem; }
 }
 
 @media (max-width: 380px) {
   .month-cell { min-height: 42px; padding: 2px; }
   .cell-date { font-size: 0.7rem; }
-  .cell-event { font-size: 0.5rem; }
+  .cell-event { font-size: 0.55rem; }
 }
-
-/* Modal */
-.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; padding: 16px; }
-.modal-overlay.active { display: flex; }
-.modal { background: white; border-radius: 12px; max-width: 400px; width: 100%; max-height: 80vh; overflow-y: auto; box-shadow: 0 20px 25px rgba(0,0,0,0.2); }
-.modal-header { padding: 16px 20px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; }
-.modal-header h2 { font-size: 1.1rem; }
-.modal-close { width: 32px; height: 32px; border-radius: 50%; border: none; background: #f1f5f9; cursor: pointer; font-size: 1.2rem; }
-.modal-body { padding: 16px 20px; }
-.modal-event { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid #e2e8f0; }
-.modal-event:last-child { border-bottom: none; }
-.modal-bar { width: 4px; min-height: 40px; border-radius: 2px; }
-.modal-bar.emma { background: #ec4899; }
-.modal-bar.oscar { background: #3b82f6; }
-.modal-bar.family { background: #10b981; }
-.modal-title { font-weight: 700; font-size: 0.95rem; margin-bottom: 4px; }
-.modal-detail { font-size: 0.8rem; color: #64748b; }
-
-/* Stats */
-.stats { display: flex; gap: 8px; padding: 12px; background: white; border-radius: 12px; margin-top: 10px; justify-content: center; flex-wrap: wrap; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
-.stat { display: flex; align-items: center; gap: 4px; font-size: 0.8rem; font-weight: 600; padding: 6px 12px; background: #f1f5f9; border-radius: 8px; }
-.stat-dot { width: 8px; height: 8px; border-radius: 50%; }
 </style>
 </head>
 <body>
+<!-- Loading -->
+<div class="loading-overlay" id="loading">
+  <div class="loading-spinner"></div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
 <div class="app">
   <div class="header">
     <h1>📚 Emma & Oscar 课程日历</h1>
-    <p>🌊 湾仔维护</p>
+    <p>🌊 湾仔维护 · 点击切换视图</p>
   </div>
   <div class="toolbar">
     <button class="btn" onclick="changeWeek(-1)">◀</button>
@@ -155,6 +189,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto
   </div>
   <div class="stats" id="stats"></div>
 </div>
+
 <div class="modal-overlay" id="modal" onclick="closeModal(event)">
   <div class="modal" onclick="event.stopPropagation()">
     <div class="modal-header">
@@ -164,6 +199,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto
     <div class="modal-body" id="modalBody"></div>
   </div>
 </div>
+
 <script>
 const courses = [
   {
@@ -1624,11 +1660,19 @@ function kidClass(kid) {
   return kid === "Emma" ? "emma" : kid === "Oscar" ? "oscar" : "family";
 }
 
+function showToast(msg) {
+  const toast = document.getElementById("toast");
+  toast.textContent = msg;
+  toast.classList.add("show");
+  setTimeout(() => toast.classList.remove("show"), 2000);
+}
+
 function toggleView() {
   currentView = currentView === 'week' ? 'month' : 'week';
   document.getElementById('viewBtn').textContent = currentView === 'week' ? '📅 月视图' : '📋 周视图';
   document.getElementById('weekView').style.display = currentView === 'week' ? 'flex' : 'none';
   document.getElementById('monthView').classList.toggle('active', currentView === 'month');
+  showToast(currentView === 'week' ? '切换到周视图' : '切换到月视图');
   render();
 }
 
@@ -1648,12 +1692,15 @@ function goToday() {
   weekStart = getMonday(now);
   currentMonth = now.getMonth();
   currentYear = now.getFullYear();
+  showToast('回到今天');
   render();
 }
 
 function toggleFilter(kid) {
   filters[kid] = !filters[kid];
   document.getElementById("f" + kid).classList.toggle("off", !filters[kid]);
+  const activeFilters = Object.entries(filters).filter(([k, v]) => v).map(([k]) => k).join(", ");
+  showToast('筛选: ' + activeFilters);
   render();
 }
 
@@ -1664,7 +1711,7 @@ function openModal(dateStr) {
   const events = getCoursesForDate(dateStr);
   let html = "";
   if (events.length === 0) {
-    html = '<p style="text-align:center;color:#64748b;padding:24px;font-style:italic;">🎉 这天没有课程安排</p>';
+    html = '<div class="empty-state"><div class="empty-state-icon">🎉</div><div class="empty-state-text">这天没有课程安排</div></div>';
   } else {
     events.forEach(ev => {
       const timeStr = ev.start_time ? `${ev.start_time}-${ev.end_time}` : "全天";
@@ -1698,17 +1745,22 @@ function render() {
 function renderWeek(todayStr) {
   const dayNames = ["周一", "周二", "周三", "周四", "周五", "周六", "周日"];
   let html = "";
+  let hasEvents = false;
+  
   for (let i = 0; i < 7; i++) {
     const d = new Date(weekStart);
     d.setDate(weekStart.getDate() + i);
     const dateStr = formatDate(d);
     const isToday = dateStr === todayStr;
     const events = getCoursesForDate(dateStr);
+    if (events.length > 0) hasEvents = true;
+    
     html += `<div class="day-card">
       <div class="day-header ${isToday ? "today" : ""}">
         <strong>${d.getMonth()+1}/${d.getDate()}</strong> ${dayNames[i]}
       </div>
       <div class="day-body ${events.length === 0 ? "empty" : ""}">`;
+    
     if (events.length === 0) {
       html += "🎉 没有课程";
     } else {
@@ -1725,6 +1777,12 @@ function renderWeek(todayStr) {
     }
     html += "</div></div>";
   }
+  
+  // 如果筛选后整周都没有课程，显示空状态
+  if (!hasEvents && Object.values(filters).some(f => !f)) {
+    html = '<div class="empty-state"><div class="empty-state-icon">🔍</div><div class="empty-state-text">本周没有符合筛选条件的课程<br>试试调整筛选器</div></div>';
+  }
+  
   document.getElementById("weekView").innerHTML = html;
 }
 
@@ -1738,6 +1796,8 @@ function renderMonth(todayStr) {
   const isMobile = window.innerWidth <= 600;
   
   let html = "";
+  let hasEvents = false;
+  
   for (let i = 0; i < totalCells; i++) {
     let dayNum, dateStr, isOther = false;
     if (i < startDow) {
@@ -1756,6 +1816,7 @@ function renderMonth(todayStr) {
     const isWeekend = dow >= 5;
     const isToday = dateStr === todayStr;
     const events = getCoursesForDate(dateStr);
+    if (events.length > 0) hasEvents = true;
     
     html += `<div class="month-cell ${isOther ? "other-month" : ""} ${isToday ? "today" : ""} ${isWeekend ? "weekend" : ""}" onclick="openModal('${dateStr}')">
       <div class="cell-date ${isWeekend ? "weekend" : ""}">${dayNum}</div>`;
@@ -1775,6 +1836,12 @@ function renderMonth(todayStr) {
     }
     html += "</div>";
   }
+  
+  // 如果筛选后整月都没有课程，显示空状态
+  if (!hasEvents && Object.values(filters).some(f => !f)) {
+    html = '<div style="grid-column: span 7; padding: 40px; text-align: center; color: #64748b;"><div style="font-size: 3rem; margin-bottom: 12px;">🔍</div><div>本月没有符合筛选条件的课程<br>试试调整筛选器</div></div>';
+  }
+  
   document.getElementById("monthBody").innerHTML = html;
 }
 
@@ -1810,11 +1877,17 @@ function renderStats() {
   `;
 }
 
+// Hide loading after render
+window.addEventListener('load', () => {
+  render();
+  setTimeout(() => {
+    document.getElementById('loading').classList.add('hidden');
+  }, 300);
+});
+
 window.addEventListener('resize', () => {
   if (currentView === 'month') render();
 });
-
-render();
 </script>
 </body>
 </html>
