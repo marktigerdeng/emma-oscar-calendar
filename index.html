@@ -81,8 +81,8 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto
 .month-header { display: grid; grid-template-columns: repeat(7, 1fr); background: var(--bg); border-bottom: 1px solid var(--border); }
 .month-header-cell { padding: 10px 2px; text-align: center; font-size: 0.8rem; font-weight: 700; color: var(--muted); }
 .month-header-cell.weekend { color: #ef4444; }
-.month-body { display: grid; grid-template-columns: repeat(7, 1fr); }
-.month-cell { min-height: 85px; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 6px; cursor: pointer; transition: background 0.15s; }
+.month-body { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); grid-auto-rows: minmax(85px, auto); }
+.month-cell { min-height: 85px; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 6px; cursor: pointer; transition: background 0.15s; overflow: hidden; }
 .month-cell:nth-child(7n) { border-right: none; }
 .month-cell:hover { background: var(--bg); }
 .month-cell.other-month { background: #f8fafc; color: #94a3b8; }
